@@ -1,58 +1,70 @@
 import axios from 'axios';
-import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { Component } from 'react';
 import { Toaster } from '../Toaster';
 import Loader from '../loader/Loader';
 import { LoaderBox } from './searchQuerry.styles';
 
 axios.defaults.baseURL = 'https://pixabay.com/api/';
 
-export const SearchQuerry = ({ target, onFind, page }) => {
-  const [isLoading, setLoading] = useState(false);
-  const [errorMessage, setErrorMesage] = useState(null);
+export class SearchQuerry extends Component {
+  state = {
+    isLoading: false,
+    errorMessage: null,
+    // targetPage: 1,
+    // targetFind: null,
+  };
 
-  useEffect(() => {
-    // if (!target) {
-    //   return;
+  async componentDidUpdate(prevProps, prevState) {
+    let currentPage = this.props.page;
+
+    // if (
+    //   prevProps.target === this.props.target ||
+    //   prevProps.page !== this.props.page
+    // ) {
+    //   this.setState({ targetPage: 1 });
     // }
-    setLoading(true);
+    if (
+      prevProps.target !== this.props.target ||
+      prevProps.page !== this.props.page
+    ) {
+      currentPage = this.props.page;
+      this.setState({ isLoading: true });
 
-    axios
-      .get(
-        `?q=${target}&page=${page}&key=32355141-118a8dcb9c7f98144e9365121&image_type=photo&orientation=horizontal&per_page=12`
-      )
-      .then(obj => {
-        if (obj.data.hits.length === 0) {
-          setErrorMesage(
-            'There are no images for this request, please try another one!!!'
-          );
-          return;
-        } else {
-          onFind(obj.data.hits, obj.data.totalHits);
-          setErrorMesage(null);
-        }
-      })
-      .catch(error => {
-        setErrorMesage(error);
-      })
-      .finally(setLoading(false));
-  }, [target, page, onFind]);
+      await axios
+        .get(
+          `?q=${this.props.target}&page=${currentPage}&key=32355141-118a8dcb9c7f98144e9365121&image_type=photo&orientation=horizontal&per_page=12`
+        )
+        .then(obj => {
+          if (obj.data.hits.length === 0) {
+            this.setState({
+              errorMessage:
+                'There are no images for this request, please try another one!!!',
+            });
+            return;
+          } else {
+            this.props.onFind(obj.data.hits, obj.data.totalHits);
+          }
+        })
+        .catch(error => {
+          this.setState({ errorMessage: error });
+        })
+        .finally(this.setState({ isLoading: false }));
+    }
+  }
 
-  return (
-    <>
-      {errorMessage && <Toaster message={errorMessage} />}
+  render() {
+    return (
+      <>
+        {this.state.errorMessage && (
+          <Toaster message={this.state.errorMessage} />
+        )}
 
-      {isLoading && (
-        <LoaderBox>
-          <Loader />
-        </LoaderBox>
-      )}
-    </>
-  );
-};
-
-SearchQuerry.propTypes = {
-  target: PropTypes.string.isRequired,
-  onFind: PropTypes.func.isRequired,
-  page: PropTypes.number.isRequired,
-};
+        {this.state.isLoading && (
+          <LoaderBox>
+            <Loader />
+          </LoaderBox>
+        )}
+      </>
+    );
+  }
+}

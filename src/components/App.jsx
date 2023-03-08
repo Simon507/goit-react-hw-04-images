@@ -13,22 +13,24 @@ export const App = () => {
   const [collections, setCollections] = useState([]);
   const [target, setTarget] = useState(null);
   const [page, setPage] = useState(1);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [modalSorse, setModalSorse] = useState('');
   const [modalTxt, setModalTxt] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
   const [totalPage, setTotalPage] = useState(1);
 
-  const onSubmit = targetFromForm => {
-    if (!targetFromForm) {
+  const onSubmit = targetSubmit => {
+    console.log(targetSubmit);
+    if (!targetSubmit || targetSubmit.length === 0) {
       setErrorMessage('Please enter any words for request');
     } else {
-      if (target !== targetFromForm) {
+      if (targetSubmit !== target) {
         setCollections([]);
         setPage(1);
       }
 
-      setTarget(targetFromForm);
+      setTarget(targetSubmit);
       setErrorMessage(null);
     }
   };
@@ -44,6 +46,7 @@ export const App = () => {
     setModalSorse(largeImageURL);
     setModalTxt(tags);
   };
+
   const onModalClose = () => {
     setModalOpen(false);
   };
@@ -59,16 +62,8 @@ export const App = () => {
   return (
     <Layout>
       <GlobalStyle />
-
       <SearchBar onSubmit={onSubmit}></SearchBar>
-
-      {target && (
-        <SearchQuerry
-          target={target}
-          onFind={onFind}
-          page={page}
-        ></SearchQuerry>
-      )}
+      <SearchQuerry target={target} onFind={onFind} page={page}></SearchQuerry>
 
       <ImageGallery
         collections={collections}
