@@ -11,7 +11,7 @@ import {
 } from './SearchBar.styles';
 
 export const SearchBar = ({ onSubmit }) => {
-  const [target, setTarget] = useState(null);
+  const [target, setTarget] = useState('');
 
   const handleChange = item => {
     setTarget(item.target.value);

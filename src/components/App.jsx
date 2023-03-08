@@ -11,7 +11,7 @@ import { LoadMore } from './loadMoreBtn/LoadMoreBtn';
 
 export const App = () => {
   const [collections, setCollections] = useState([]);
-  const [target, setTarget] = useState(null);
+  const [target, setTarget] = useState('');
   const [page, setPage] = useState(1);
 
   const [modalOpen, setModalOpen] = useState(false);
