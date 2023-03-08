@@ -17,7 +17,7 @@ export class SearchQuerry extends Component {
   async componentDidUpdate(prevProps, prevState) {
     let currentPage = this.props.page;
 
-    // if (
+    // if (vvv
     //   prevProps.target === this.props.target ||
     //   prevProps.page !== this.props.page
     // ) {
