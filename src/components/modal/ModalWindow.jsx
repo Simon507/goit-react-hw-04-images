@@ -2,9 +2,6 @@ import { Overlay, ModalFrame } from './ModalWindow.styles';
 import PropTypes from 'prop-types';
 
 export const ModalWindow = ({ largeImageURL, tags, onModalClose }) => {
-  console.log(largeImageURL);
-  console.log(tags);
-
   window.addEventListener('keydown', e => {
     if (e.code === 'Escape') {
       console.log(`asdadad`);

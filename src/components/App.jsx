@@ -19,11 +19,9 @@ export const App = () => {
   const [modalSorse, setModalSorse] = useState('');
   const [modalTxt, setModalTxt] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
-  const [totalHits, setTotalHits] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
 
   const onSubmit = targetSubmit => {
-    console.log(targetSubmit);
     if (!targetSubmit || targetSubmit.length === 0) {
       setErrorMessage('Please enter any words for request');
     } else {
@@ -55,12 +53,6 @@ export const App = () => {
             );
             return;
           } else {
-            // if (!collections || collections === []) {
-            //   console.log(`sssss`);
-            //   setCollections(obj.data.hits);
-            //   return;
-            // }
-
             setCollections(prevState => [...prevState, ...obj.data.hits]);
             setTotalPage(Math.ceil(obj.data.totalHits / 12));
             setErrorMessage(null);
