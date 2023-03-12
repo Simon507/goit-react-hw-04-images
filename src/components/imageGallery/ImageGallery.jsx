@@ -4,9 +4,15 @@ import { ImageGalleryItem } from 'components/imageGalleryItem/ImageGalleryItem';
 import { Imagelist, GalleryItem } from './ImageGallery.styles';
 
 export const ImageGallery = ({ collections, onImageClick }) => {
+  let newCollections = collections;
+
+  if (!collections) {
+    return;
+  }
+
   return (
     <Imagelist className="gallery">
-      {collections.map(item => (
+      {newCollections.map(item => (
         <GalleryItem key={item.id}>
           <ImageGalleryItem
             largeImageURL={item.largeImageURL}
